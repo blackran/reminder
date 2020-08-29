@@ -1,4 +1,4 @@
-import { ADD_TASKS, REMOVE_TASKS, TOGGLE_CHECK, INIT_DATA, CHANGE_SHOW_EDIT, CHANGE_SHOW_PUT } from '../actions/TasksActions'
+import { ADD_TASKS, REMOVE_TASKS, TOGGLE_CHECK, INIT_DATA, CHANGE_SHOW_EDIT, CHANGE_SHOW_PUT, CHANGE_TASKS } from '../actions/TasksActions'
 import shortid from 'shortid'
 import  AsyncStorage  from '@react-native-community/async-storage'
 
@@ -14,7 +14,7 @@ const initState = {
     ],
     showEdit: false,
     length: 0,
-    isEdit: false
+    idEdit: false
 }
 
 const TasksReducers = (state = initState, action) => {
@@ -51,9 +51,24 @@ const TasksReducers = (state = initState, action) => {
         case CHANGE_SHOW_EDIT:
             return Object.assign({}, state, {showEdit: action.data})
 
+        case CHANGE_TASKS:
+            let const_change_tasks = state.dataTasks.map(e => {
+                let stock = e
+                if (e.idTasks === action.data.idTasks) {
+                    stock = {        
+                        idTasks: e.idTasks,
+                        contentTasks: e.contentTasks,
+                        finishTasks: e.finishTasks,
+                        finishAt: e.finishAt,
+                        createAt: e.createAt
+                    }
+                }
+                return stock
+            })
+            return Object.assign({}, state, {dataTasks: const_change_tasks})
+
         case CHANGE_SHOW_PUT:
-            console.log('test', action.data)
-            return Object.assign({}, state, {showEdit: action.data, isEdit: true})
+            return Object.assign({}, state, {showEdit: action.data.status, idEdit: action.data.id})
 
         case TOGGLE_CHECK:
             var stock = state.dataTasks.filter(e => {

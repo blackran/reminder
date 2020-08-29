@@ -12,20 +12,31 @@ class Input extends Component {
         this.state = {
             value: '',
             maxLength: 20,
-            date: this.formatDateNow()
+            date: this.formatDateNow(),
+            idEdit: null
         }
     }
 
     addTask () {
         const { value, date } = this.state
         if( value.length !== 0){
-            Keyboard.dismiss()
-            this.props.changeShowEdit(false)
-            let data = {
-                contentTasks: value,
-                finishAt: date
+            if (!this.props.tasks.isEdit) {
+                this.props.changeShowEdit(false)
+                    let data = {
+                        contentTasks: value,
+                        finishAt: date,
+                        idTasks: this.state.idEdit
+                    }
+                this.props.changeTasks(data)
+            } else {
+                Keyboard.dismiss()
+                this.props.changeShowEdit(false)
+                let data = {
+                    contentTasks: value,
+                    finishAt: date
+                }
+                this.props.addTasks(data)
             }
-            this.props.addTasks(data)
         }
     }
 
@@ -57,6 +68,19 @@ class Input extends Component {
         }
     }
 
+    componentDidUpdate(){
+        if (this.props.tasks.idEdit != this.state.idEdit && this.props.tasks.idEdit != '') {
+            const { tasks } = this.props
+            const stock = tasks.dataTasks.filter(e=> {
+                return e.idTasks === tasks.idEdit
+            })
+            this.setState({ idEdit: JSON.parse(JSON.stringify(this.props.tasks.idEdit))})
+            if(stock.length != 0){
+                this.setState({ value: stock[0].contentTasks, date: stock[0].finishAt})
+            }
+        }
+    }
+
     render () {
         return (
             <View style={{ height: 120, marginBottom: 40, marginTop: 30 }}>
@@ -68,6 +92,7 @@ class Input extends Component {
 
                     <TextInput
                         placeholder='enter votre tache'
+                        value={this.state.value}
                         onChangeText={this.OnChange.bind(this)}
                         maxLength={this.state.maxLength}
                         onKeyUp={(e) => {
@@ -75,7 +100,6 @@ class Input extends Component {
                                 // Return if duration between previous key press and backspace is less than 20ms
                                 if (Math.abs(this.lastKeyEventTimestamp - e.timeStamp) <= 20) return;
                                 this.setState({value: this.state.value.pop()})
-
                             } else {
                                 // Record non-backspace key event time stamp
                                 this.lastKeyEventTimestamp = e.timeStamp;
@@ -184,8 +208,11 @@ const mapDispatchToProps = dispatch => {
         addTasks: (data) => {
             dispatch({ type: 'ADD_TASKS', data })
         },
+        changeTasks: (data) => {
+            dispatch({ type: 'CHANGE_TASKS', data })
+        },
         changeShowEdit: (data) => {
-            dispatch({ type: 'CHANGE_SHOW_EDIT', data })
+            dispatch({ type: 'CHANGE_SHOW_EDIT' })
         }
     }
 }

@@ -29,8 +29,8 @@ class BlocksItem extends Component {
         );
     }
 
-    ChangeShowPut () {
-        this.props.changeShowPut(true)
+    ChangeShowPut (id) {
+        this.props.changeShowPut({ status: true, id: id})
     }
 
     render() {
@@ -63,8 +63,8 @@ class BlocksItem extends Component {
                         name={data.finishTasks? 'check': 'calendar'}
                         color='#517fa4'
                         size={20}
-                        onPress={ this.ChangeShowPut.bind(this) }
-                    /><Text>{"  "}</Text>
+                    />
+                        <Text>{"  "}</Text>
                     <Text 
                     style={{ 
                         opacity: 0.5, 
@@ -83,7 +83,7 @@ class BlocksItem extends Component {
                     // color='#9b9b9b'
                     color='#517fa4'
                     size={20}
-                    onPress={ this.ChangeShowPut.bind(this) }
+                    onPress={ this.ChangeShowPut.bind(this, data.idTasks) }
                 /> 
 
                 <Text>{"   "}</Text>
