@@ -1,0 +1,16 @@
+{
+  "name": "todo",
+  "displayName": "todo",
+  "expo": {
+    "name": "todo",
+    "slug": "todo",
+    "icon": "./icon.png",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "android": {
+      "package": "todo.apk"
+    }
+  }
+}
