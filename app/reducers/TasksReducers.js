@@ -14,7 +14,43 @@ const initState = {
     ],
     showEdit: false,
     length: 0,
-    idEdit: false
+    idEdit: ''
+}
+
+
+englishDate = (dt) => {
+        let stock = dt.split('-')
+        return stock[1] + '/' + stock[0] + '/' + stock[2]    }
+
+
+setFalseLastDate = (data) => {
+    let date = new Date()
+
+    let dd = date.getDate() 
+    let mm = date.getMonth() + 1 
+    let yyyy = date.getFullYear() 
+
+    if (dd < 10) { 
+        dd = '0' + dd
+    } 
+    if (mm < 10) { 
+        mm = '0' + mm
+    } 
+    let today = dd + '-' + mm + '-' + yyyy
+
+    return data.map(e=>{
+        let stock = e
+        if (new Date(this.englishDate(e.finishAt)) - new Date(this.englishDate(today))< 0) {
+           stock = {
+                idTasks: e.idTasks,
+                contentTasks: e.contentTasks,
+                finishTasks: true,
+                finishAt: e.finishAt,
+                createAt: e.createAt
+            }
+        }
+        return stock
+    }) 
 }
 
 const TasksReducers = (state = initState, action) => {
@@ -32,24 +68,24 @@ const TasksReducers = (state = initState, action) => {
                 } 
             ]
             AsyncStorage.setItem('todoNante', JSON.stringify(stock))
-            return Object.assign(
-                {}, state
-                , {dataTasks: stock}
+            return Object.assign({}, state
+                , {dataTasks: setFalseLastDate(stock), idEdit: ''}
             )
         case INIT_DATA:
             // AsyncStorage.removeItem('todoNante')
             return Object.assign(
                 {}, state
-                , {dataTasks: action.data}
+                , {dataTasks: setFalseLastDate(action.data)}
             )
         case REMOVE_TASKS:
             var stock = state.dataTasks.filter(e => {
-                return e.finishTasks !== true
+                return e.idTasks !== action.id
             })
             AsyncStorage.setItem('todoNante', JSON.stringify(stock))
-            return Object.assign({}, state, { dataTasks: stock })
+            return Object.assign({}, state, { dataTasks: setFalseLastDate(stock) })
+
         case CHANGE_SHOW_EDIT:
-            return Object.assign({}, state, {showEdit: action.data})
+            return Object.assign({}, state, {showEdit: action.data, idEdit: ''})
 
         case CHANGE_TASKS:
             let const_change_tasks = state.dataTasks.map(e => {
@@ -57,15 +93,15 @@ const TasksReducers = (state = initState, action) => {
                 if (e.idTasks === action.data.idTasks) {
                     stock = {        
                         idTasks: e.idTasks,
-                        contentTasks: e.contentTasks,
+                        contentTasks: action.data.contentTasks,
                         finishTasks: e.finishTasks,
-                        finishAt: e.finishAt,
+                        finishAt: action.data.finishAt,
                         createAt: e.createAt
                     }
                 }
                 return stock
             })
-            return Object.assign({}, state, {dataTasks: const_change_tasks})
+            return Object.assign({}, state, {dataTasks: setFalseLastDate(const_change_tasks), idEdit: ''})
 
         case CHANGE_SHOW_PUT:
             return Object.assign({}, state, {showEdit: action.data.status, idEdit: action.data.id})

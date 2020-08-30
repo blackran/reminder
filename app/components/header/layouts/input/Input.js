@@ -11,7 +11,7 @@ class Input extends Component {
         super(props);
         this.state = {
             value: '',
-            maxLength: 20,
+            maxLength: 15,
             date: this.formatDateNow(),
             idEdit: null
         }
@@ -20,22 +20,28 @@ class Input extends Component {
     addTask () {
         const { value, date } = this.state
         if( value.length !== 0){
-            if (!this.props.tasks.isEdit) {
-                this.props.changeShowEdit(false)
-                    let data = {
-                        contentTasks: value,
-                        finishAt: date,
-                        idTasks: this.state.idEdit
-                    }
+            let isError = false
+            Keyboard.dismiss()
+            if (this.props.tasks.idEdit !== '') {
+                let data = {
+                    contentTasks: value,
+                    finishAt: date,
+                    idTasks: this.state.idEdit
+                }
                 this.props.changeTasks(data)
-            } else {
-                Keyboard.dismiss()
                 this.props.changeShowEdit(false)
+                isError = true
+            } else {
                 let data = {
                     contentTasks: value,
                     finishAt: date
                 }
                 this.props.addTasks(data)
+                this.props.changeShowEdit(false)
+                isError = true
+            }
+            if (isError) {
+                this.setState({ idEdit: null })
             }
         }
     }
@@ -68,7 +74,7 @@ class Input extends Component {
         }
     }
 
-    componentDidUpdate(){
+    ifEdit() {
         if (this.props.tasks.idEdit != this.state.idEdit && this.props.tasks.idEdit != '') {
             const { tasks } = this.props
             const stock = tasks.dataTasks.filter(e=> {
@@ -79,6 +85,13 @@ class Input extends Component {
                 this.setState({ value: stock[0].contentTasks, date: stock[0].finishAt})
             }
         }
+    }
+    componentDidMount() {
+        this.ifEdit()
+    }
+
+    componentDidUpdate(){
+        this.ifEdit()
     }
 
     render () {

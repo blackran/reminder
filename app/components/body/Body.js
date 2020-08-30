@@ -31,9 +31,13 @@ class Body extends Component {
         }
     }
 
+    englishDate(dt) {
+        let stock = dt.split('-')
+        return stock[1] + '/' + stock[0] + '/' + stock[2]    }
+
     sortByDate () {
         return this.props.tasks.dataTasks.sort((a, b) => {
-            return new Date(a.createAt) - new Date(b.createAt);
+            return new Date(this.englishDate(a.finishAt)) - new Date(this.englishDate(b.finishAt));
         });
     }
 
@@ -41,10 +45,11 @@ class Body extends Component {
         this.setState({selectedIndex})
         this.filterData()
     }
+    
 
     filterData () {
         var response = []
-        var stock = this.props.tasks.dataTasks
+        var stock = this.sortByDate()
         switch (this.state.selectedIndex) {
             case 0:
                 return stock
@@ -63,7 +68,7 @@ class Body extends Component {
 
 
     render() {
-        this.sortByDate()
+        const { tasks } = this.props
         // const buttons = ['Tous', 'finis', 'en cours']
         const component1 = () => 
             <View style={{ flexDirection: 'row' }}>
@@ -103,28 +108,28 @@ class Body extends Component {
         </View>
         const buttons = [{ element: component1 }, { element: component2 }, { element: component3 }]
         return (
-            <View style={{ marginTop: 30 }}>
-                <Text style={{ textAlign:'center', fontWeight:'bold', fontSize: 30 }}>votre tache</Text>
+            <View style={{ marginTop: 30, flex: 1 }}>
                 <View>
+                    <Text style={{ textAlign:'center', fontWeight:'bold', fontSize: 30 }}>votre tache {/* ({tasks.length}/{tasks.dataTasks.length})*/}</Text>
                     <ButtonGroup
                         onPress={this.updateIndex.bind(this)}
                         selectedIndex={this.state.selectedIndex}
                         buttons={buttons}
-                        containerStyle={{height: 40}}
+                        buttonStyle={{borderWidth: 0}}
+                        containerStyle={{height: 40, borderWidth: 0}}
+                        innerBorderStyle={{width: 0}}
+                        containerBorderRadius={0}
                     />
-                </View>
-                <View style={styles.root}>
-
-
                 </View>
 
                 <ScrollView
                     contentInsetAdjustmentBehavior="automatic"
+                    contentContainerStyle={{ flexGrow: 1, paddingBottom: 20 }}
                     style={styles.scrollView}
                 >
                     {
-                        this.filterData().map((e)=>{
-                            return <BlocksItem  key={e.idTasks} data={e}/>
+                        this.filterData().map((e, i)=>{
+                            return <BlocksItem  key={e.idTasks} data={e} i={i}/>
                         })
                     }
                 </ScrollView>
@@ -134,17 +139,8 @@ class Body extends Component {
 }
 
 const styles = StyleSheet.create({
-    root: {
-        backgroundColor: 'white',
-        flexDirection:'row',
-        // justifyContent: 'flex-end',
-        marginLeft: 20,
-        paddingRight: 10
-    },
     scrollView: {
-        //backgroundColor: Colors.lighter,
-        padding: 5,
-        marginBottom: 35
+        padding: 5
     }
 });
 
@@ -162,6 +158,9 @@ const mapDispatchToProps = dispatch => {
         },
         removeTask: () => {
             dispatch({ type: 'REMOVE_TASKS'})
+        },
+        changeTasks: (data) => {
+            dispatch({ type: 'CHANGE_TASKS', data })
         },
         changeShowPut: (data) => {
             dispatch({ type: 'CHANGE_SHOW_PUT', data})

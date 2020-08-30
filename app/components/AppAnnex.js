@@ -24,7 +24,7 @@ class AppAnnex extends Component {
         return (
             <Provider store={store}>
                 <View style={styles.root}>
-                    <View>
+                    <View style={{flex: 1}}>
                         <Header/>
                         <Body/>
                     </View>
@@ -36,7 +36,7 @@ class AppAnnex extends Component {
                                     reverse
                                     name='add'
                                     type='MaterialIcons'
-                                    color='#f50'
+                                    color='#2196f3'
                                     size={30}
                                     onPress={() => this.props.changeShowEdit(true)}
                                 /> : null
