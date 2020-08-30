@@ -78,7 +78,7 @@ class Body extends Component {
                     color={ this.state.selectedIndex === 0 ? 'white': '#555555' }
                 />
             <Text style={{ color: this.state.selectedIndex === 0 ? 'white': '#555555' }}>
-                {" "}Touts
+                {" "}Tout
             </Text>
         </View>
         const component2 = () =>
@@ -90,7 +90,7 @@ class Body extends Component {
                     color={ this.state.selectedIndex === 1 ? 'white': '#555555' }
                 />
             <Text style={{ color: this.state.selectedIndex === 1 ? 'white': '#555555' }}>
-                {" "}Finish
+                {" "}Terminé
             </Text>
         </View>
         const component3 = () =>
@@ -110,7 +110,7 @@ class Body extends Component {
         return (
             <View style={{ marginTop: 30, flex: 1 }}>
                 <View>
-                    <Text style={{ textAlign:'center', fontWeight:'bold', fontSize: 30 }}>votre tache {/* ({tasks.length}/{tasks.dataTasks.length})*/}</Text>
+                    <Text style={{ textAlign:'center', fontWeight:'bold', fontSize: 30 }}>votre tâche {/* ({tasks.length}/{tasks.dataTasks.length})*/}</Text>
                     <ButtonGroup
                         onPress={this.updateIndex.bind(this)}
                         selectedIndex={this.state.selectedIndex}

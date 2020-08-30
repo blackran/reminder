@@ -98,13 +98,9 @@ class Input extends Component {
         return (
             <View style={{ height: 120, marginBottom: 40, marginTop: 30 }}>
                 <View style={{ backgroundColor: '#eceff1', height: 200, padding: 10, borderRadius: 5}}>
-                    <Text 
-                    style={{ marginLeft: 10, marginBottom: 3 }}>
-                        { this.state.value.length } /{ this.state.maxLength }
-                    </Text>
 
                     <TextInput
-                        placeholder='enter votre tache'
+                        placeholder='Entrer la tâche'
                         value={this.state.value}
                         onChangeText={this.OnChange.bind(this)}
                         maxLength={this.state.maxLength}
@@ -119,30 +115,37 @@ class Input extends Component {
                             }
                         }}
                         style={styles.textinput}/>
-                    <DatePicker
-                        style={{width: 200, marginBottom: 10}}
-                        date={this.state.date}
-                        mode="date"
-                        placeholder="select date"
-                        format="DD-MM-YYYY"
-                        // minDate="01-05-2016"
-                        // maxDate="06-01-2016"
-                        confirmBtnText="Confirm"
-                        cancelBtnText="Cancel"
-                        customStyles={{
-                          dateIcon: {
-                            position: 'absolute',
-                            left: 0,
-                            top: 4,
-                            marginLeft: 0
-                          },
-                          dateInput: {
-                            marginLeft: 36
-                          }
-                          // ... You can check the source to find the other keys.
-                        }}
-                        onDateChange={(date) => {this.setState({date: date})}}
-                      />
+                    <View style={{flexDirection: 'row', justifyContent: 'space-between' }}>
+                        <DatePicker
+                            style={{width: 200, marginBottom: 10}}
+                            date={this.state.date}
+                            mode="date"
+                            placeholder="select date"
+                            format="DD-MM-YYYY"
+                            // minDate="01-05-2016"
+                            // maxDate="06-01-2016"
+                            confirmBtnText="Confirm"
+                            cancelBtnText="Cancel"
+                            customStyles={{
+                              dateIcon: {
+                                position: 'absolute',
+                                left: 0,
+                                top: 4,
+                                marginLeft: 0
+                              },
+                              dateInput: {
+                                marginLeft: 36
+                              }
+                              // ... You can check the source to find the other keys.
+                            }}
+                            onDateChange={(date) => {this.setState({date: date})}}
+                          />
+                        <Text
+                        style={{ marginBottom: 3, marginRight: 10 }}>
+                            { this.state.value.length } /{ this.state.maxLength }
+                        </Text>
+
+                    </View>
                     <View style={styles.buttonsInput}>
                         <View style={styles.buttonInput}>
                             <Button

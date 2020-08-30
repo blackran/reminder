@@ -7,6 +7,6 @@
     <key>EXUpdatesURL</key>
     <string>https://exp.host/@blackran/todo</string>
     <key>EXUpdatesReleaseChannel</key>
-    <string>staging</string>
+    <string>default</string>
   </dict>
 </plist>
